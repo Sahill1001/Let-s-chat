@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Gulzar&display=swap" rel="stylesheet">
+    <title>Let's Chat</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Gulzar', serif;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: linear-gradient(rgb(241 241 241), rgb(17 99 199 / 59%));
+    }
+
+    .container {
+        margin-bottom: 30px;
+        position: relative;
+        width: 70%;
+        max-width: 100%;
+        height: calc(100vh - 40px);
+        background: white;
+        display: flex;
+        border: 2px dotted black;
+        border-radius: 10px;
+    }
+
+    .container .leftSide {
+        position: relative;
+        flex: 30%;
+        background-color: white;
+        border-right: 1px dotted black;
+        border-radius: 8px;
+        overflow-y: auto;
+    }
+
+    .container .rightSide {
+        position: relative;
+        flex: 70%;
+        overflow-y: auto;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        position: sticky;
+        top: 0px;
+        width: 100%;
+        height: 60px;
+        background: #e1e1e1;
+        justify-content: space-between;
+        padding: 0 15px;
+        z-index: 2;
+    }
+
+    .userImg {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+    .cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .nav-icon {
+        display: flex;
+    }
+
+    .nav-icon li:hover {
+        background-color: #06d7cd;
+        border-radius: 50%;
+    }
+
+    .nav-icon li {
+        display: flex;
+        list-style: none;
+        cursor: pointer;
+        color: rgb(87, 85, 85);
+        font-size: 2em;
+        margin-left: 22px;
+    }
+
+    .search {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        position: sticky;
+        justify-content: center;
+        align-items: center;
+        top: 60px;
+        z-index: 2;
+        background: white;
+    }
+
+    .search div {
+        width: 100%;
+        z-index: 2;
+    }
+
+    .search div input {
+        width: 100%;
+        outline: none;
+        border: 1px dotted black;
+        background: transparent;
+        height: 38px;
+        padding: 6px;
+        border-radius: 30px;
+        font-size: 1em;
+        padding-left: 60px;
+    }
+
+    .search div input:hover {
+        border: 2px dotted #06d7cd;
+    }
+
+    .search div input::placeholder {
+        color: #bbb;
+    }
+
+    .search div ion-icon {
+        position: absolute;
+        left: 30px;
+        top: 14px;
+        font-size: 1.2em;
+    }
+
+    .chat-list {
+        position: relative;
+        height: calc(100%-110px);
+    }
+
+    .chat-list .block {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px dotted black;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 30px;
+    }
+
+    .chat-list .block.active {
+        background: #ebebeb;
+    }
+
+    .chat-list .block:hover {
+        background: #f5f5f5;
+        border-bottom: 2px dotted #06d7cd;
+    }
+
+    .chat-list .block .imgBox {
+        position: relative;
+        min-width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin-right: 10px;
+        padding-left: 20px;
+    }
+
+    .chat-list .block .details {
+        position: relative;
+        width: 100%;
+    }
+
+    .chat-list .block .details .listHead {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .chat-list .block .details .listHead h4 {
+        font-size: 1.1em;
+        font-weight: 600;
+        color: black;
+    }
+
+    .chat-list .block .details .listHead .time {
+        font-size: 0.75em;
+        color: rgb(133, 127, 127);
+    }
+
+    .chat-list .block .details .listHead .time {
+        color: #111;
+    }
+
+    .chat-list .block.unread .details .listHead .time {
+        color: #06d7cd;
+    }
+
+    .msg-p {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .msg-p p {
+        color: #aaa;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        font-size: 0.9em;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .msg-p b {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        color: azure;
+        background-color: rgb(32, 182, 32);
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.75em;
+    }
+
+    #name {
+        font-weight: 400;
+        line-height: 1.2em;
+        margin-top: 5px;
+    }
+
+    #name span {
+        color: rgb(19, 154, 19);
+    }
+
+    .chatBox {
+        color: white;
+        position: relative;
+        width: 100%;
+        height: calc(100%-120px);
+        padding: 50px;
+        overflow-y: auto;
+    }
+
+    .message {
+        position: relative;
+        display: flex;
+        width: 100%;
+        margin: 5px 0;
+        height: auto;
+    }
+
+    .message p {
+        position: relative;
+        right: 0;
+        text-align: right;
+        max-width: 65%;
+        padding: 12px;
+        background: transparent;
+        border-bottom: 1px dotted black;
+        border-radius: 20px;
+        font-size: 0.9em;
+    }
+
+    .message p span {
+        display: block;
+        margin-top: 5px;
+        font-size: 0.85em;
+        opacity: 0.5;
+    }
+
+    .my-message {
+        justify-content: flex-end;
+    }
+
+    .frnd-message {
+        justify-content: flex-start;
+    }
+
+    .my-message p {
+        width: auto;
+        background-color: #f6242f;
+        text-align: left;
+        height: 80px;
+    }
+
+    .frnd-message p {
+        width: auto;
+        background-color: rgb(0 25 255);
+        text-align: left;
+        height: 80px;
+    }
+
+    .chatBox-inp {
+        position: fixed;
+        z-index: 2;
+        bottom: 37px;
+        width: 47%;
+        height: 60px;
+        padding: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-radius: 50px;
+    }
+
+    .chatBox-inp ion-icon {
+        cursor: pointer;
+        font-size: 1.8em;
+        color: rgb(87, 85, 85);
+    }
+
+    .chatBox-inp ion-icon:hover {
+        background-color: #06d7cd;
+        border-radius: 50%;
+    }
+
+    .chatBox-inp input {
+        position: relative;
+        width: 90%;
+        border: 1px dotted black;
+        outline: none;
+        border-radius: 25px;
+        font-size: 1em;
+        text-align: initial;
+        padding-left: 20px;
+        height: 35px;
+    }
+
+    .chatBox-inp input:hover {
+        border: 2px dotted #06d7cd;
+    }
+
+    @media only screen and (max-width: 600px) {
+        body {
+            height: auto;
+            width: auto;
+        }
+
+        .container {
+            width: 70%;
+            height: 450px;
+            display: flex;
+        }
+
+        .container .leftSide {
+            flex: 30%;
+        }
+
+        .container .rightSide {
+            flex: 70%;
+        }
+
+        .header {
+            width: 100%;
+            height: 35px;
+            justify-content: center;
+        }
+
+        .userImg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-icon li {
+            font-size: 1em;
+        }
+
+        .search {
+            height: 20px;
+        }
+
+        .search div {
+            width: 100%;
+            margin-top: -30px;
+        }
+
+        .search div ion-icon {
+            top: -13px;
+            font-size: 1.em;
+        }
+
+        .cover {
+            display: none;
+        }
+
+        .chat-list .block .details .listHead h4 {
+            margin-left: -50px;
+            padding-top: 5px;
+            bottom: 0;
+        }
+
+        .msg-p p {
+            display: none;
+        }
+
+        .msg-p b {
+            display: none;
+        }
+
+        .chat-list .block .details .listHead .time {
+            display: none;
+        }
+
+        .chatBox-inp {
+            height: 45px;
+            bottom: 218px;
+            border-radius: unset;
+        }
+
+        .search div input {
+            height: 28px;
+        }
+
+        .my-message p {
+            margin-right: -40px;
+
+        }
+
+        .frnd-message p {
+            margin-left: -40px;
+
+        }
+
+        .search div ion-icon {
+            margin-left: -16px;
+        }
+
+        .cover {
+            display: none;
+        }
+
+        .nav-icon {
+            justify-content: start;
+        }
+        #name {
+            font-size: 12px;
+        }
+        .message {    
+            display: flex;
+            width:auto;
+            height: auto;
+        }
+    }
+</style>
+
+<body>
+    <div class="container">
+        <!-- contact list  -->
+        <div class="leftSide">
+            <!-- header  -->
+            <div class="header">
+                <div class="userImg">
+                    <img src="https://pbs.twimg.com/profile_images/1380439593338593282/JdLbQXOm_400x400.jpg"
+                        class="cover">
+                </div>
+                <ul class="nav-icon">
+                    <li>
+                        <ion-icon name="wifi"></ion-icon>
+                    </li>
+                    <li>
+                        <ion-icon name="chatbubbles"></ion-icon>
+                    </li>
+                    <li>
+                        <ion-icon name="more" list="more"></ion-icon>
+                    </li>
+                </ul>
+            </div>
+            <!-- search -->
+            <div class="search">
+                <div>
+                    <input type="text" placeholder="Serach or start new chart" autocomplete="additional-name" autofocus>
+                    <ion-icon name="search"></ion-icon>
+                </div>
+            </div>
+            <!-- chat list -->
+            <div class="chat-list">
+                {% for user in all_user %}
+                {% if user.name != cur_user %}
+                <div class="block">
+                    <div class="imgBox">
+                        <img src="https://media.istockphoto.com/vectors/man-user-icon-avatar-in-clipart-vector-vector-id1333853947?k=20&m=1333853947&s=612x612&w=0&h=nHxfszSFs-ZIevqGnzPh_8FBNqTSlR-7DS1GdaU3Z3M="
+                            class="cover">
+                    </div>
+                    <div class="details" id="{{user.name}}" onclick="changeChat(this.id)">
+                        <div class="listHead">
+                            <h4>{{user.name}}</h4>
+                            <p class="time">10:40am</p>
+                        </div>
+                        <div class="msg-p">
+                            <p>What are you doing?</p>
+                            <b>1</b>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <!-- ChatBox  -->
+        {% if friend != "None" %}
+        <div class="rightSide">
+            <div class="header">
+                <div class="userImg">
+                </div>
+                <h4 id="name">{{friend}}<br><span>Online</span></h4>
+                <ul class="nav-icon">
+                    <li>
+                        <ion-icon name="call"></ion-icon>
+                    </li>
+                    <li>
+                        <ion-icon name="videocam"></ion-icon>
+                    </li>
+                    <li>
+                        <ion-icon name="more"></ion-icon>
+                    </li>
+                </ul>
+            </div>
+            <!-- Messages  -->
+            <div class="chatBox">
+                {% for msg in all_msg %}
+                {% if msg.sender == cur_user and msg.receiver == friend %}
+                <div class="message my-message">
+                    <p>{{msg.msg}}<br><span>{{msg.time}}</span></p>
+                </div>
+                {% elif msg.sender == friend and msg.receiver == cur_user %}
+                <div class="message frnd-message">
+                    <p>{{msg.msg}}<br><span>{{msg.time}}</span></p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="chatBox-inp">
+                <ion-icon name="happy"></ion-icon>
+                <ion-icon name="attach"></ion-icon>
+                <ion-icon name="image"></ion-icon>
+                <input id="message" type="text" placeholder="Type a message">
+                <ion-icon id="chat-message-submit" name="send"></ion-icon>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+    {{ room_name|json_script:"room-name" }}
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        console.log(roomName)
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName + '/'
+        );
+        let bool = false;
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log(bool)
+            // document.querySelector('#chat-log').value += (data.message + '\n')
+            if (bool === false) {
+                var d = new Date(); // for now
+                var h = d.getHours(); // => 9
+                var m = d.getMinutes(); // =>  30
+                document.getElementsByClassName("chatBox")[0].innerHTML += `<div class="message frnd-message">
+                    <p>${data.message}<br><span>${h}:${m}</span></p>
+                </div>`
+
+            }
+            bool = false;
+
+        };
+
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        // document.querySelector('#chat-message-input').focus();
+        // document.querySelector('#chat-message-input').onkeyup = function(e) {
+        //     if (e.keyCode === 13) {  // enter, return
+        //         document.querySelector('#chat-message-submit').click();
+        //     }
+        // };
+
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            var d = new Date(); // for now
+            var h = d.getHours(); // => 9
+            var m = d.getMinutes(); // =>  30
+            const message = document.getElementById("message").value;
+            bool = true;
+            document.getElementsByClassName("chatBox")[0].innerHTML += `<div class="message my-message">
+                    <p>${message}<br><span>${h}:${m}</span></p>
+                </div>`
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+
+                }
+            };
+            xmlhttp.open("GET", `/data?user={{cur_user}}` + `&friend={{friend}}` + `&msg=` + message, true);
+            xmlhttp.send();
+            document.getElementById("message").value = '';
+
+        };
+
+        function changeChat(new_friend) {
+            // console.log(friend)
+            window.location.href = `/room?user={{cur_user}}` + `&friend=` + new_friend;
+        }
+    </script>
+</body>
+
+</html>

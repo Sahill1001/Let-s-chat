@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Gulzar&display=swap" rel="stylesheet">
+    <title>SingUp page</title>
+    <style>
+        body{
+        color:rgb(23, 121, 154);
+        margin: 0px;
+        padding: 0px; 
+        background: url('img/background.png');
+        background-repeat: no-repeat;
+        background-size:100%;
+        height:100%;
+        font-family: 'Gulzar', serif;
+    }
+    h1{
+        font-weight: bold;
+        text-align: center;
+    }
+    #h2{
+        text-align:center;   
+    }
+    .page{
+        background-image: linear-gradient(rgb(241 241 241),rgb(17 99 199 / 59%));
+        margin: auto;
+        border: 2px dotted black;
+        width: 23%;
+        min-height: 60vh;
+        border-radius: 20px;
+    }
+    .form{
+        text-align: center;
+    }
+    input{
+        background-color: transparent;
+        text-align:initial;
+        padding-left: 15px;
+        width:75%;
+        height:35px;
+        border: 1px dotted black;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+    button{
+        background-color: transparent;
+        color: rgb(12, 12, 12);
+        font-weight: bold;
+        width:45%;
+        height: 45px;
+        border: 1px dotted black;
+        border-radius: 10px;
+    }
+    a{
+        font-weight: bold;
+        text-decoration:dashed;
+        color:blue;
+    }
+    a:hover{
+        text-decoration: underline;
+        color:white;
+        border-radius: 10px;
+    }
+    button:hover{
+        border: 2px solid blue;
+        background-color: white;
+    }
+    input:hover{
+        border: 2px solid blue;
+        background-color:white;
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Let's Chat</h1>
+    <div class="page">
+        <h2 id="h2">Sign up</h2>
+        <div class="form">
+            <input type="text" id="user-name-input" name="username" placeholder="Enter username here" autocomplete="additional-name" required>
+            <p></p>
+            <input type="tel" id="contact" name="userPh" placeholder="Enter contact number here" autocomplete="additional-name" required>
+            <p></p>
+            <input type="password" id="password" name="userPh" placeholder="Enter password here" autocomplete="additional-name" required>
+            <p></p>
+            <button id="submit">Sign up</button>
+        </div>
+    </div>
+</body>
+<script>
+        alert("{{message}}")
+        
+        document.querySelector('#submit').onclick = function(e) {
+            var userName = document.querySelector('#user-name-input').value;
+            var contact = document.querySelector('#contact').value;
+            var password = document.querySelector('#password').value;
+            if (userName == '' || contact == '' || password == '')
+            {
+                alert('Enter all details to Signup!!!')
+                return
+            }
+            alert('Creating account....')
+            window.location.href = `/save-user?user=`+ userName + `&contact=`+ contact + `&password=`+ password;
+        };
+</script>
+</html>
